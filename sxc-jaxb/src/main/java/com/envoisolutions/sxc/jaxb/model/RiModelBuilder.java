@@ -87,7 +87,7 @@ public class RiModelBuilder {
 
         for (Class clazz : classes) {
             if (clazz.isAnnotationPresent(XmlRegistry.class)) {
-                addXmlRegistry(clazz);
+                addXmlRegistry(clazz, model);
             }
         }
     }
@@ -105,7 +105,7 @@ public class RiModelBuilder {
     }
 
     @SuppressWarnings({"unchecked"})
-    private EnumInfo addEnum(Model model, RuntimeEnumLeafInfo runtimeEnumLeafInfo) {
+    private static EnumInfo addEnum(Model model, RuntimeEnumLeafInfo runtimeEnumLeafInfo) {
         // compiler can't handle the wacky over loaded methods in the jaxb ri
         // so we convert it to a simpler type
         RuntimeLeafInfo leafInfo = runtimeEnumLeafInfo;
@@ -151,7 +151,7 @@ public class RiModelBuilder {
         return enumInfo;
     }
 
-    private Bean addBean(Model model, RuntimeClassInfo runtimeClassInfo) {
+    private static Bean addBean(Model model, RuntimeClassInfo runtimeClassInfo) {
         Bean bean = model.getBean(runtimeClassInfo.getClazz());
 
         if (bean == null) {
@@ -166,7 +166,7 @@ public class RiModelBuilder {
         return bean;
     }
 
-    private void initBean(Model model, Bean bean, RuntimeClassInfo runtimeClassInfo) {
+    private static void initBean(Model model, Bean bean, RuntimeClassInfo runtimeClassInfo) {
         bean.setRootElementName(runtimeClassInfo.getElementName());
         bean.setSchemaTypeName(runtimeClassInfo.getTypeName());
 
@@ -242,7 +242,7 @@ public class RiModelBuilder {
         bean.setBaseClass(baseClass);
     }
 
-    private Property createProperty(Bean bean, RuntimePropertyInfo runtimePropertyInfo) {
+    private static Property createProperty(Bean bean, RuntimePropertyInfo runtimePropertyInfo) {
         Property property = new Property(bean, runtimePropertyInfo.getName());
 
         property.setType(runtimePropertyInfo.getRawType());
@@ -342,7 +342,7 @@ public class RiModelBuilder {
         return property;
     }
 
-    private ElementMapping createXmlMapping(Property property, RuntimeTypeRef runtimeTypeRef) {
+    private static ElementMapping createXmlMapping(Property property, RuntimeTypeRef runtimeTypeRef) {
         ElementMapping mapping = new ElementMapping(property, runtimeTypeRef.getTagName());
 
         mapping.setNillable(runtimeTypeRef.isNillable());
@@ -356,7 +356,7 @@ public class RiModelBuilder {
         return mapping;
     }
 
-    private ElementMapping createXmlMapping(Property property, RuntimeElementInfo runtimeElement) {
+    private static ElementMapping createXmlMapping(Property property, RuntimeElementInfo runtimeElement) {
         ElementMapping mapping = new ElementMapping(property, runtimeElement.getElementName());
 
         if (property.getAdapterType() == null) {
@@ -368,7 +368,7 @@ public class RiModelBuilder {
         return mapping;
     }
 
-    private ElementMapping createXmlMapping(Property property, RuntimeClassInfo runtimeClassInfo) {
+    private static ElementMapping createXmlMapping(Property property, RuntimeClassInfo runtimeClassInfo) {
         ElementMapping mapping = new ElementMapping(property, runtimeClassInfo.getElementName());
 
         if (property.getAdapterType() == null) {
@@ -380,7 +380,7 @@ public class RiModelBuilder {
         return mapping;
     }
 
-    private void addXmlRegistry(Class clazz) {
+    private static void addXmlRegistry(Class clazz, final Model model) {
         ObjectFactory objectFactory = new ObjectFactory(model, clazz);
         model.getObjectFactories().add(objectFactory);
         String pkgNamespace = null;
