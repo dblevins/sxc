@@ -29,6 +29,8 @@ public class LifecycleCallback {
     public final Method beforeMarshal;
     public final Method afterMarshal;
 
+    public static final LifecycleCallback NONE = new LifecycleCallback(null, null, null, null);
+
     public LifecycleCallback(Method beforeUnmarshal, Method afterUnmarshal, Method beforeMarshal, Method afterMarshal) {
         this.beforeUnmarshal = beforeUnmarshal;
         this.afterUnmarshal = afterUnmarshal;
@@ -85,5 +87,21 @@ public class LifecycleCallback {
         if (afterMarshal != null) {
             afterMarshal.invoke(bean, marshaller);
         }
+    }
+
+    public Method getBeforeUnmarshal() {
+        return beforeUnmarshal;
+    }
+
+    public Method getAfterUnmarshal() {
+        return afterUnmarshal;
+    }
+
+    public Method getBeforeMarshal() {
+        return beforeMarshal;
+    }
+
+    public Method getAfterMarshal() {
+        return afterMarshal;
     }
 }

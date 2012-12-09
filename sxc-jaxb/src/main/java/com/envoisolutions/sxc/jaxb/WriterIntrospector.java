@@ -178,8 +178,11 @@ public class WriterIntrospector {
 
         // add beforeMarshal
         JExpression lifecycleCallbackRef = builder.getLifecycleCallbackVar();
-        if (builder.getWriteVariableManager().containsId(builder.getLifecycleCallbackVar().name())) {
-            lifecycleCallbackRef = builder.getJAXBObjectClass().staticRef(builder.getLifecycleCallbackVar().name());
+        if (lifecycleCallbackRef instanceof JFieldVar) {
+            JFieldVar fieldVar = (JFieldVar) lifecycleCallbackRef;
+            if (builder.getWriteVariableManager().containsId(fieldVar.name())) {
+                lifecycleCallbackRef = builder.getJAXBObjectClass().staticRef(fieldVar.name());
+            }
         }
         block.invoke(builder.getWriteContextVar(), "beforeMarshal").arg(builder.getWriteObject()).arg(lifecycleCallbackRef);
 

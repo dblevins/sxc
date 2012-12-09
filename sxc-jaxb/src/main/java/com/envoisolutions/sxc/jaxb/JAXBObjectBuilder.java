@@ -85,7 +85,7 @@ public class JAXBObjectBuilder {
     private String writerDefaultNS;
     private JInvocation superInvocation;
     private Set<String> dependencies = new TreeSet<String>();
-    private JFieldVar lifecycleCallbackVar;
+    private JExpression lifecycleCallbackVar;
 
     public JAXBObjectBuilder(JAXBObjectBuilder parent, ElementParserBuilderImpl parserBuilder, boolean mixed) {
         this.parent = parent;
@@ -148,7 +148,18 @@ public class JAXBObjectBuilder {
 
         // add lifecycle callabck field
         JClass callbackClass = builderContext.toJClass(LifecycleCallback.class);
-        lifecycleCallbackVar = jaxbObjectClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, callbackClass, fieldManager.createId("lifecycleCallback"), JExpr._new(callbackClass).arg(JExpr.dotclass(builderContext.toJClass(type))));
+        if (hasCallbacks(new LifecycleCallback(type))) {
+            lifecycleCallbackVar = jaxbObjectClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, callbackClass, fieldManager.createId("lifecycleCallback"), JExpr._new(callbackClass).arg(JExpr.dotclass(builderContext.toJClass(type))));
+        } else {
+            lifecycleCallbackVar = callbackClass.staticRef("NONE");
+        }
+    }
+
+    private static boolean hasCallbacks(LifecycleCallback lifecycleCallback) {
+        return !(lifecycleCallback.getAfterMarshal() == null
+                && lifecycleCallback.getAfterUnmarshal() == null
+                && lifecycleCallback.getBeforeMarshal() == null
+                && lifecycleCallback.getBeforeUnmarshal() == null);
     }
 
     private JExpression newQName(QName xmlRootElement) {
@@ -212,8 +223,11 @@ public class JAXBObjectBuilder {
             // add afterUnmarshal
             getReadTailBlock().add(new JBlankLine());
             JExpression lifecycleCallbackRef = lifecycleCallbackVar;
-            if (parserBuilder.getVariableManager().containsId(lifecycleCallbackVar.name())) {
-                lifecycleCallbackRef = jaxbObjectClass.staticRef(lifecycleCallbackVar.name());
+            if (lifecycleCallbackRef instanceof JFieldVar) {
+                JFieldVar fieldVar = (JFieldVar) lifecycleCallbackRef;
+                if (parserBuilder.getVariableManager().containsId(fieldVar.name())) {
+                    lifecycleCallbackRef = jaxbObjectClass.staticRef(fieldVar.name());
+                }
             }
             getReadTailBlock().invoke(getReadContextVar(), "afterUnmarshal").arg(readObject).arg(lifecycleCallbackRef);
         }
@@ -229,8 +243,11 @@ public class JAXBObjectBuilder {
             // add afterMarshal
             getWriteMethod().body().add(new JBlankLine());
             JExpression lifecycleCallbackRef = lifecycleCallbackVar;
-            if (writerBuilder.getVariableManager().containsId(lifecycleCallbackVar.name())) {
-                lifecycleCallbackRef = jaxbObjectClass.staticRef(lifecycleCallbackVar.name());
+            if (lifecycleCallbackRef instanceof JFieldVar) {
+                JFieldVar fieldVar = (JFieldVar) lifecycleCallbackRef;
+                if (writerBuilder.getVariableManager().containsId(fieldVar.name())) {
+                    lifecycleCallbackRef = jaxbObjectClass.staticRef(fieldVar.name());
+                }
             }
             getWriteMethod().body().invoke(getReadContextVar(), "afterMarshal").arg(getWriteObject()).arg(lifecycleCallbackRef);
         }
@@ -270,8 +287,11 @@ public class JAXBObjectBuilder {
 
                     // add beforeUnmarshal
                     JExpression lifecycleCallbackRef = lifecycleCallbackVar;
-                    if (parserBuilder.getVariableManager().containsId(lifecycleCallbackVar.name())) {
-                        lifecycleCallbackRef = jaxbObjectClass.staticRef(lifecycleCallbackVar.name());
+                    if (lifecycleCallbackRef instanceof JFieldVar) {
+                        JFieldVar fieldVar = (JFieldVar) lifecycleCallbackRef;
+                        if (parserBuilder.getVariableManager().containsId(fieldVar.name())) {
+                            lifecycleCallbackRef = jaxbObjectClass.staticRef(fieldVar.name());
+                        }
                     }
                     body.invoke(getReadContextVar(), "beforeUnmarshal").arg(readObject).arg(lifecycleCallbackRef);
                     body.add(new JBlankLine());
@@ -470,7 +490,7 @@ public class JAXBObjectBuilder {
         return block;
     }
 
-    public JFieldVar getLifecycleCallbackVar() {
+    public JExpression getLifecycleCallbackVar() {
         return lifecycleCallbackVar;
     }
 
