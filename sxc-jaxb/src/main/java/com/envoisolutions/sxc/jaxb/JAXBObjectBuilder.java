@@ -383,10 +383,10 @@ public class JAXBObjectBuilder {
 
     public JFieldVar getDatatypeFactory() {
         if (datatypeFactory == null) {
-            datatypeFactory = jaxbObjectClass.field(JMod.PRIVATE | JMod.FINAL, builderContext.toJClass(DatatypeFactory.class), fieldManager.createId("datatypeFactory"));
+            datatypeFactory = jaxbObjectClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, builderContext.toJClass(DatatypeFactory.class), fieldManager.createId("datatypeFactory"));
 
             // add code to constructor which initializes the static dtFactory field
-            JTryBlock tryBlock = constructor.body()._try();
+            JTryBlock tryBlock = jaxbObjectClass.init()._try();
             tryBlock.body().assign(datatypeFactory, builderContext.toJClass(DatatypeFactory.class).staticInvoke("newInstance"));
 
             JCatchBlock catchBlock = tryBlock._catch((builderContext.toJClass(DatatypeConfigurationException.class)));
