@@ -49,10 +49,12 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JFieldRef;
 import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
+import com.sun.codemodel.JPackage;
 import com.sun.codemodel.JTryBlock;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
@@ -69,7 +71,7 @@ public class JAXBObjectBuilder {
     private ElementParserBuilderImpl parserBuilder;
     private ElementWriterBuilderImpl writerBuilder;
     private final IdentityManager fieldManager;
-    private final Map<String, JFieldVar> adapters;
+    private final Map<String, JFieldRef> adapters;
     private final Map<String, JFieldVar> privateFieldAccessors;
     private final Map<String, JFieldVar> privatePropertyAccessors;
     private JFieldVar datatypeFactory;
@@ -112,7 +114,7 @@ public class JAXBObjectBuilder {
         this.mixed = mixed;
         wrapperElement = false;
         fieldManager = new IdentityManager();
-        adapters = new TreeMap<String, JFieldVar>();
+        adapters = new TreeMap<String, JFieldRef>();
         privateFieldAccessors = new TreeMap<String, JFieldVar>();
         privatePropertyAccessors = new TreeMap<String, JFieldVar>();
 
@@ -331,17 +333,33 @@ public class JAXBObjectBuilder {
         return writerBuilder;
     }
 
-    public JVar getAdapter(Class adapterType) {
+    public JFieldRef getAdapter(Class adapterType) {
         String adapterId = adapterType.getName();
-        JFieldVar var = adapters.get(adapterId);
-        if (var == null) {
-            String fieldName = decapitalize(adapterType.getSimpleName()) + "Adapter";
-            fieldName = fieldManager.createId(fieldName);
-            JClass jClass = builderContext.toJClass(adapterType);
-            var = jaxbObjectClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, jClass, fieldName, JExpr._new(jClass));
-            adapters.put(adapterId, var);
+        JFieldRef ref = adapters.get(adapterId);
+        if (ref == null) {
+            final String fieldName = decapitalize(adapterType.getSimpleName()) + "Adapter";
+            final JPackage jPackage = jaxbObjectClass.getPackage();
+            final JDefinedClass definedClass;
+
+            if (jPackage._getClass("Adapters") != null) {
+                definedClass = jPackage._getClass("Adapters");
+                if (!definedClass.fields().containsKey(fieldName)) {
+                    JClass jClass = builderContext.toJClass(adapterType);
+                    definedClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jClass, fieldName, JExpr._new(jClass));
+                }
+            } else {
+                try {
+                    definedClass = jPackage._class("Adapters");
+                    JClass jClass = builderContext.toJClass(adapterType);
+                    definedClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jClass, fieldName, JExpr._new(jClass));
+                } catch (JClassAlreadyExistsException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+            ref = definedClass.staticRef(fieldName);
+            adapters.put(adapterId, ref);
         }
-        return var;
+        return ref;
     }
 
     public JFieldVar getPrivateFieldAccessor(Field field) {

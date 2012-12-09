@@ -62,6 +62,7 @@ import com.sun.codemodel.JCatchBlock;
 import com.sun.codemodel.JConditional;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JFieldRef;
 import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
@@ -115,13 +116,6 @@ public class ReaderIntrospector {
                     if (isPrivate(property.getGetter()) || isPrivate(property.getSetter())) {
                         builder.getPrivatePropertyAccessor(property.getGetter(), property.getSetter(), property.getName());
                     }
-                }
-            }
-
-            // declare all adapter classes
-            for (Property property : allProperties) {
-                if (property.getAdapterType() != null) {
-                    builder.getAdapter(property.getAdapterType());
                 }
             }
 
@@ -310,7 +304,7 @@ public class ReaderIntrospector {
                                 toSet = coerce(builder, xsrVar, value, toClass(mapping.getComponentType()));
                             } else {
                                 // adapted type
-                                JVar adapterVar = builder.getAdapter(property.getAdapterType());
+                                JFieldRef adapterVar = builder.getAdapter(property.getAdapterType());
                     
                                 block.add(new JBlankLine());
 
@@ -400,7 +394,7 @@ public class ReaderIntrospector {
         if (property.isIdref()) {
             toSet = value;
         } else if (property.getAdapterType() != null) {
-            JVar adapterVar = builder.getAdapter(property.getAdapterType());
+            JFieldRef adapterVar = builder.getAdapter(property.getAdapterType());
             toSet = adapterVar.invoke("unmarshal").arg(value);
         } else {
             String propertyName = property.getName();
@@ -566,7 +560,7 @@ public class ReaderIntrospector {
             toSet = xsrVar.invoke("getElementAsString");
         } else if (property.getAdapterType() != null) {
             // adapted type
-            JVar adapterVar = builder.getAdapter(property.getAdapterType());
+            JFieldRef adapterVar = builder.getAdapter(property.getAdapterType());
 
             // read the raw value
             JVar xmlValueVar = readElement(builder, xsrVar, block, nillable, builder.getReadVariableManager().createId(propertyName + "Raw"), property.getComponentAdaptedType());
@@ -657,8 +651,7 @@ public class ReaderIntrospector {
 
         JExpression toSet;
         if (property.getAdapterType() != null) {
-            JVar adapterVar = builder.getAdapter(property.getAdapterType());
-
+            JFieldRef adapterVar = builder.getAdapter(property.getAdapterType());
             JVar xmlValueVar = block.decl(context.toJClass(String.class), builder.getReadVariableManager().createId(propertyName + "Raw"), value);
             block.add(new JBlankLine());
 

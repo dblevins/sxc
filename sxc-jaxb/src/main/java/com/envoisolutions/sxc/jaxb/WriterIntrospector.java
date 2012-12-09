@@ -58,6 +58,7 @@ import com.sun.codemodel.JCatchBlock;
 import com.sun.codemodel.JConditional;
 import com.sun.codemodel.JExpr;
 import com.sun.codemodel.JExpression;
+import com.sun.codemodel.JFieldRef;
 import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JForEach;
 import com.sun.codemodel.JInvocation;
@@ -745,7 +746,7 @@ public class WriterIntrospector {
 
     private <T extends JExpression> T writeAdapterConversion(JAXBObjectBuilder builder, JBlock block, Property property, T propertyVar) {
         if (property.getAdapterType() != null) {
-            JVar adapterVar = builder.getAdapter(property.getAdapterType());
+            JFieldRef adapterVar = builder.getAdapter(property.getAdapterType());
             JVar valueVar = block.decl(context.toJClass(property.getComponentAdaptedType()), builder.getWriteVariableManager().createId(property.getName()), JExpr._null());
 
             JTryBlock tryBlock = block._try();
