@@ -30,10 +30,8 @@ import javax.xml.bind.helpers.AbstractMarshallerImpl;
 import javax.xml.bind.helpers.ValidationEventImpl;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Result;
@@ -43,6 +41,7 @@ import javax.xml.validation.Schema;
 import com.envoisolutions.sxc.util.PrettyPrintXMLStreamWriter;
 import com.envoisolutions.sxc.util.RuntimeXMLStreamException;
 import com.envoisolutions.sxc.util.W3CDOMStreamWriter;
+import com.envoisolutions.sxc.util.XmlFactories;
 import com.envoisolutions.sxc.util.XoXMLStreamWriter;
 import com.envoisolutions.sxc.util.XoXMLStreamWriterImpl;
 import org.w3c.dom.Document;
@@ -52,7 +51,6 @@ import org.w3c.dom.Node;
 public class MarshallerImpl extends AbstractMarshallerImpl {
 	public static final String MARSHALLER = "sxc.marshaller";
 
-    private final XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
     private final JAXBIntrospectorImpl introspector;
 
     private final Map<Class<?>, ? super XmlAdapter> adapters = new HashMap<Class<?>, XmlAdapter>();
@@ -80,7 +78,7 @@ public class MarshallerImpl extends AbstractMarshallerImpl {
                     throw new UnsupportedOperationException("Node type not supported.");
                 }
             } else {
-                writer = xmlOutputFactory.createXMLStreamWriter(result);
+                writer = XmlFactories.getXof().createXMLStreamWriter(result);
             }
             marshal(jaxbElement, writer);
         } catch (XMLStreamException e) {

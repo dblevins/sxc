@@ -20,11 +20,11 @@ package com.envoisolutions.sxc.jaxb;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.envoisolutions.sxc.util.XmlFactories;
 import com.envoisolutions.sxc.util.XoXMLStreamReader;
 import com.envoisolutions.sxc.util.XoXMLStreamReaderImpl;
 import com.envoisolutions.sxc.util.XoXMLStreamWriter;
@@ -33,8 +33,6 @@ import com.envoisolutions.sxc.util.XoXMLStreamWriterImpl;
 public abstract class JAXBObject<T> extends JAXBClass<T> {
     protected QName xmlRootElement;
     protected QName xmlType;
-    protected XMLOutputFactory xof = XMLOutputFactory.newInstance();
-    protected XMLInputFactory xif = XMLInputFactory.newInstance();
 
     protected JAXBObject(Class<T> type, QName xmlRootElement, QName xmlType, Class<? extends JAXBClass>... dependencies) {
         super(type, dependencies);
@@ -55,7 +53,7 @@ public abstract class JAXBObject<T> extends JAXBClass<T> {
     }
 
     public T read(InputStream is, RuntimeContext context) throws Exception {
-        XMLStreamReader reader = xif.createXMLStreamReader(is);
+        XMLStreamReader reader = XmlFactories.getXif().createXMLStreamReader(is);
         try {
             return read(reader, context);
         } finally {
@@ -78,7 +76,7 @@ public abstract class JAXBObject<T> extends JAXBClass<T> {
     }
 
     public void write(OutputStream is, T o, RuntimeContext context) throws Exception {
-        XMLStreamWriter w = xof.createXMLStreamWriter(is);
+        XMLStreamWriter w = XmlFactories.getXof().createXMLStreamWriter(is);
         try {
             write(w, o);
         } finally {

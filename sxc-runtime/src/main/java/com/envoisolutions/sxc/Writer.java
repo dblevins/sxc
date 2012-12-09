@@ -1,5 +1,6 @@
 package com.envoisolutions.sxc;
 
+import com.envoisolutions.sxc.util.XmlFactories;
 import com.envoisolutions.sxc.util.XoXMLStreamWriter;
 import com.envoisolutions.sxc.util.XoXMLStreamWriterImpl;
 
@@ -10,7 +11,6 @@ import java.util.Map;
 
 public abstract class Writer {
     protected Context context;
-    XMLOutputFactory xof;
 
     public Writer(Context context) {
         this.context = context;
@@ -23,10 +23,7 @@ public abstract class Writer {
     }
 
     protected XMLOutputFactory getXMLOutputFactory() {
-        if (xof == null) {
-            xof = XMLOutputFactory.newInstance();
-        }
-        return xof;
+        return XmlFactories.getXof();
     }
     
     public void write(XMLStreamWriter xsr, Object o) throws Exception {
