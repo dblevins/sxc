@@ -119,7 +119,7 @@ public class JAXBObjectBuilder {
         privatePropertyAccessors = new TreeMap<String, JFieldVar>();
 
         try {
-            jaxbObjectClass = builderContext.getCodeModel()._class("sxc." + type.getName() + "JAXB");
+            jaxbObjectClass = builderContext.getCodeModel()._class("" + type.getName() + "$JAXB");
             jaxbObjectClass._extends(builderContext.getCodeModel().ref(JAXBObject.class));
         } catch (JClassAlreadyExistsException e) {
             throw new BuildException(e);

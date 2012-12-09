@@ -170,7 +170,7 @@ public class JAXBIntrospectorImpl extends JAXBIntrospector {
 
         Class<?> readerClass;
         try {
-            readerClass = classLoader.loadClass("sxc." + type.getName() + "JAXB");
+            readerClass = classLoader.loadClass("" + type.getName() + "$JAXB");
         } catch (ClassNotFoundException e) {
             return null;
         }

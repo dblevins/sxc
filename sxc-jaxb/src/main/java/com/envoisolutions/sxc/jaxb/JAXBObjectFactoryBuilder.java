@@ -47,7 +47,7 @@ public class JAXBObjectFactoryBuilder {
         this.builderContext = builderContext;
         this.type = type;
 
-        String className = "sxc." + type.getName() + "JAXB";
+        String className = "" + type.getName() + "$JAXB";
 
         try {
             jaxbObjectFactoryClass = builderContext.getCodeModel()._class(className);

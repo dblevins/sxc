@@ -53,7 +53,7 @@ public class JAXBEnumBuilder {
         this.xmlRootElement = xmlRootElement;
         this.xmlType = xmlType;
 
-        String className = "sxc." + type.getName() + "JAXB";
+        String className = "" + type.getName() + "$JAXB";
 
         try {
             jaxbEnumClass = builderContext.getCodeModel()._class(className);
