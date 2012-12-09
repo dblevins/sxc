@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import org.eclipse.jdt.internal.compiler.env.INameEnvironment;
 import org.eclipse.jdt.internal.compiler.env.NameEnvironmentAnswer;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.compiler.problem.DefaultProblemFactory;
+import sun.misc.Unsafe;
 
 public class EclipseCompiler extends com.envoisolutions.sxc.compiler.Compiler {
     private CompilerOptions compilerOptions;
@@ -81,8 +83,50 @@ public class EclipseCompiler extends com.envoisolutions.sxc.compiler.Compiler {
             throw new BuildException("Compile completed with " + errorCount + " errors and " + (compilerRequestor.getProblems().size() - errorCount) + " warnings");
         }
 
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
+        // Force all the generated classes into the same classloader
+        // as the JAXB annotated classes so they have access to protected fields
+        if (unsafe != null) for (Map.Entry<String, byte[]> entry : byteCode.entrySet()) {
+            final String key = entry.getKey();
+            if (!key.endsWith("$JAXB") && !key.endsWith("Adapters")) continue;
+
+            final byte[] proxyBytes = entry.getValue();
+
+            final String originalClassName = key.replace("$JAXB", "");
+
+            try {
+                Class<?> original = loader.loadClass(originalClassName);
+                try {
+                    original.getClassLoader().loadClass(key);
+                } catch (ClassNotFoundException e) {
+                    unsafe.defineClass(key, proxyBytes, 0, proxyBytes.length, original.getClassLoader(), original.getProtectionDomain());
+                }
+            } catch (ClassNotFoundException e) {
+                System.out.println(key);
+                e.printStackTrace();
+                try {
+                    loader.loadClass(key);
+                } catch (ClassNotFoundException e1) {
+                    unsafe.defineClass(key, proxyBytes, 0, proxyBytes.length, loader, null);
+                }
+            }
+        }
+
         // wrap generted byte code with a classloader
-        return new MemoryClassLoader(Thread.currentThread().getContextClassLoader(), byteCode);
+        return new MemoryClassLoader(loader, byteCode);
+    }
+
+    private static final Unsafe unsafe;
+    static {
+        Unsafe theUnsafe = null;
+        try {
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            field.setAccessible(true);
+            theUnsafe = (Unsafe) field.get(null);
+        } catch (Throwable ignored) {
+        }
+        unsafe = theUnsafe;
     }
 
     private static final class CompilationUnit implements ICompilationUnit {

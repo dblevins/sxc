@@ -53,8 +53,9 @@ public class ElementWriterBuilderImpl extends AbstractWriterBuilder implements E
         this.writerClass = writerClass;
         this.model = buildContext.getCodeModel();
 
-        method = writerClass.method(JMod.PUBLIC | JMod.FINAL, void.class, "write");
+        method = writerClass.method(JMod.PUBLIC | JMod.STATIC |JMod.FINAL, void.class, "_write");
         objectVar = addBasicArgs(method, model.ref(type), decapitalize(type.getSimpleName()));
+
         currentBlock = method.body();
         currentBlock.add(conditions);
     }

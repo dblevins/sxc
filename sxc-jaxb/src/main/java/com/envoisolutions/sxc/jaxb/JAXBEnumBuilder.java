@@ -62,9 +62,6 @@ public class JAXBEnumBuilder {
             throw new BuildException(e);
         }
 
-        // INSTANCE variable
-        JFieldVar instanceVar = jaxbEnumClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jaxbEnumClass, "INSTANCE", JExpr._new(jaxbEnumClass));
-
         // constructor
         JMethod constructor = jaxbEnumClass.constructor(JMod.PUBLIC);
         constructor.body().invoke("super")
@@ -72,29 +69,29 @@ public class JAXBEnumBuilder {
                 .arg(newQName(xmlRootElement))
                 .arg(newQName(xmlType));
 
+        // instance parse just calls the static method
+        JMethod instanceParse = jaxbEnumClass.method(JMod.PUBLIC, type, "parse")._throws(Exception.class);
+        JVar xsrVar = instanceParse.param(XoXMLStreamReader.class, "reader");
+        JVar contextVar = instanceParse.param(builderContext.toJClass(RuntimeContext.class), "context");
+        JVar value = instanceParse.param(String.class, "value");
+        instanceParse.body()._return(JExpr.invoke("parse" + type.getSimpleName()).arg(xsrVar).arg(contextVar).arg(value));
+
+        // instance toString just calls the static toString
+        JMethod instanceToString = jaxbEnumClass.method(JMod.PUBLIC, String.class, "toString")._throws(Exception.class);
+        JVar beanVar = instanceToString.param(Object.class, "bean");
+        JVar parameterNameVar = instanceToString.param(String.class, "parameterName");
+        contextVar = instanceToString.param(builderContext.toJClass(RuntimeContext.class), "context");
+        value = instanceToString.param(type, decapitalize(type.getSimpleName()));
+        instanceToString.body()._return(JExpr.invoke("toString" + type.getSimpleName()).arg(beanVar).arg(parameterNameVar).arg(contextVar).arg(value));
+
         // static parse
-        JMethod staticParse = jaxbEnumClass.method(JMod.PUBLIC | JMod.STATIC, type, "parse" + type.getSimpleName())._throws(Exception.class);
-        JVar xsrVar = staticParse.param(XoXMLStreamReader.class, "reader");
-        JVar contextVar = staticParse.param(builderContext.toJClass(RuntimeContext.class), "context");
-        JVar value = staticParse.param(String.class, "value");
-        staticParse.body()._return(instanceVar.invoke("parse").arg(xsrVar).arg(contextVar).arg(value));
-
-        // static toString
-        JMethod staticToString = jaxbEnumClass.method(JMod.PUBLIC | JMod.STATIC, String.class, "toString" + type.getSimpleName())._throws(Exception.class);
-        JVar beanVar = staticToString.param(Object.class, "bean");
-        JVar parameterNameVar = staticToString.param(String.class, "parameterName");
-        contextVar = staticToString.param(builderContext.toJClass(RuntimeContext.class), "context");
-        value = staticToString.param(type, decapitalize(type.getSimpleName()));
-        staticToString.body()._return(instanceVar.invoke("toString").arg(beanVar).arg(parameterNameVar).arg(contextVar).arg(value));
-
-        // instance parse
-        parseMethod = jaxbEnumClass.method(JMod.PUBLIC, type, "parse")._throws(Exception.class);
+        parseMethod = jaxbEnumClass.method(JMod.PUBLIC | JMod.STATIC, type, "parse" + type.getSimpleName())._throws(Exception.class);
         parseXSR = parseMethod.param(XoXMLStreamReader.class, "reader");
         parseContext = parseMethod.param(builderContext.toJClass(RuntimeContext.class), "context");
         parseValue = parseMethod.param(String.class, "value");
 
         // static toString
-        toStringMethod = jaxbEnumClass.method(JMod.PUBLIC, String.class, "toString")._throws(Exception.class);
+        toStringMethod = jaxbEnumClass.method(JMod.PUBLIC | JMod.STATIC, String.class, "toString" + type.getSimpleName())._throws(Exception.class);
         toStringBean = toStringMethod.param(Object.class, "bean");
         toStringParameterName = toStringMethod.param(String.class, "parameterName");
         toStringContext = toStringMethod.param(builderContext.toJClass(RuntimeContext.class), "context");

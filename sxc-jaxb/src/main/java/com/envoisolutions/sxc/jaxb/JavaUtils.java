@@ -118,6 +118,6 @@ public final class JavaUtils {
     }
 
     public static boolean isPrivate(Member member) {
-        return member != null && (!Modifier.isPublic(member.getDeclaringClass().getModifiers()) || !Modifier.isPublic(member.getModifiers()) || Modifier.isFinal(member.getModifiers()));
+        return member != null && (Modifier.isPrivate(member.getDeclaringClass().getModifiers()) || Modifier.isPrivate(member.getModifiers()) || Modifier.isFinal(member.getModifiers()));
     }
 }

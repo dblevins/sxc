@@ -124,13 +124,6 @@ public class WriterIntrospector {
                 }
             }
 
-            // declare all adapter classes
-            for (Property property : allProperties) {
-                if (property.getAdapterType() != null) {
-                    builder.getAdapter(property.getAdapterType());
-                }
-            }
-
             builders.put(bean, builder);
         }
 

@@ -111,9 +111,17 @@ public class ElementParserBuilderImpl extends AbstractParserBuilder implements E
         }
 
         if (methodNameHint == null) methodNameHint = "";
-        method = readerClass.method(JMod.PUBLIC | JMod.FINAL, returnType == null ? void.class : returnType, "read" + capitalize(methodNameHint));
 
+        method = readerClass.method(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, returnType == null ? void.class : returnType, "_read" + capitalize(methodNameHint));
         addBasicArgs(method);
+
+        if (methodNameHint.length() == 0) {
+            JMethod instanceMethod = readerClass.method(JMod.PUBLIC | JMod.FINAL, returnType == null ? void.class : returnType, "read" + capitalize(methodNameHint))._throws(Exception.class);
+            final JVar reader = instanceMethod.param(XoXMLStreamReader.class, "reader");
+            final JVar context = instanceMethod.param(this.buildContext.getUnmarshalContextClass(), "context");
+            instanceMethod.body()._return(JExpr.invoke(method).arg(reader).arg(context));
+        }
+
 
         this.depth = depth;
 

@@ -22,6 +22,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -132,21 +134,31 @@ public class JAXBObjectBuilder {
                 .arg(newQName(xmlType));
 
 
-        // INSTANCE static field
-        JVar instance = jaxbObjectClass.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jaxbObjectClass, "INSTANCE", JExpr._new(jaxbObjectClass));
-
         // add static read method
-        JMethod method = jaxbObjectClass.method(JMod.PUBLIC | JMod.STATIC, type, "read" + type.getSimpleName())._throws(Exception.class);
-        JVar xsrVar = method.param(XoXMLStreamReader.class, "reader");
-        JVar contextVar = method.param(builderContext.getBuildContext().getUnmarshalContextClass(), "context");
-        method.body()._return(instance.invoke("read").arg(xsrVar).arg(contextVar));
+        {
+            JMethod method = jaxbObjectClass.method(JMod.PUBLIC | JMod.STATIC, type, "read" + type.getSimpleName())._throws(Exception.class);
+            JVar xsrVar = method.param(XoXMLStreamReader.class, "reader");
+            JVar contextVar = method.param(builderContext.getBuildContext().getUnmarshalContextClass(), "context");
+            method.body()._return(JExpr.invoke("_read").arg(xsrVar).arg(contextVar));
+        }
 
         // add static write method
-        method = jaxbObjectClass.method(JMod.PUBLIC | JMod.STATIC, void.class, "write" + type.getSimpleName())._throws(Exception.class);
-        xsrVar = method.param(XoXMLStreamWriter.class, "writer");
-        JVar item = method.param(type, toValidId(decapitalize(type.getSimpleName())));
-        contextVar = method.param(builderContext.getBuildContext().getMarshalContextClass(), "context");
-        method.body().add(instance.invoke("write").arg(xsrVar).arg(item).arg(contextVar));
+        {
+            JMethod method = jaxbObjectClass.method(JMod.PUBLIC | JMod.STATIC, void.class, "write" + type.getSimpleName())._throws(Exception.class);
+            JVar xsrVar = method.param(XoXMLStreamWriter.class, "writer");
+            JVar item = method.param(type, toValidId(decapitalize(type.getSimpleName())));
+            JVar contextVar = method.param(builderContext.getBuildContext().getMarshalContextClass(), "context");
+            method.body().add(JExpr.invoke("_write").arg(xsrVar).arg(item).arg(contextVar));
+        }
+
+        // add instance write method
+        {
+            JMethod method = jaxbObjectClass.method(JMod.PUBLIC , void.class, "write")._throws(Exception.class);
+            JVar xsrVar = method.param(XoXMLStreamWriter.class, "writer");
+            JVar item = method.param(type, toValidId(decapitalize(type.getSimpleName())));
+            JVar contextVar = method.param(builderContext.getBuildContext().getMarshalContextClass(), "context");
+            method.body().add(JExpr.invoke("_write").arg(xsrVar).arg(item).arg(contextVar));
+        }
 
         // add lifecycle callabck field
         JClass callbackClass = builderContext.toJClass(LifecycleCallback.class);

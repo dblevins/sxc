@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +38,10 @@ import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlRegistry;
 
 import com.sun.xml.bind.v2.ContextFactory;
+import com.sun.xml.bind.v2.model.runtime.RuntimeTypeInfoSet;
 
 public class JAXBContextImpl extends JAXBContext {
     private static final Logger logger = Logger.getLogger(JAXBContextImpl.class.getName());
@@ -98,7 +102,16 @@ public class JAXBContextImpl extends JAXBContext {
         // checking for annotations on the class, becuase even checking an
         // annotation is present is an expensive operation
         LinkedList<Class> unknownTypes = new LinkedList<Class>();
+
         for (Class xmlType : classes) {
+
+            // loadJAXBClass isn't smart enough to load all the classes associated with the ObjectFactory
+            if (xmlType.getSimpleName().equals("ObjectFactory") && xmlType.isAnnotationPresent(XmlRegistry.class)) {
+//                loadJAXBObjectFactory(properties, classes);
+                unknownTypes.add(xmlType);
+                continue;
+            }
+
             JAXBClass jaxbClass = JAXBIntrospectorImpl.loadJAXBClass(xmlType, null);
             if (jaxbClass != null) {
                 introspector.addJAXBClass(jaxbClass);
@@ -129,7 +142,24 @@ public class JAXBContextImpl extends JAXBContext {
 
         logger.info("Created SXC JAXB Context.");
     }
-    
+
+    // TODO Finish
+    private void loadJAXBObjectFactory(Map<String, ?> properties, Class[] classes) throws JAXBException {
+        // The obvious optimization is to know that because the ObjectFactory JAXBClass can be loaded
+        // it means we've already generated and can directly load the related types from the RuntimeTypeInfoSet
+        Map<String, Object> riProperties = new LinkedHashMap<String, Object>(properties);
+        for (Iterator<String> iterator = riProperties.keySet().iterator(); iterator.hasNext();) {
+            String key =  iterator.next();
+            if (key.startsWith("com.envoisolutions")) {
+                iterator.remove();
+            }
+
+        }
+
+        final com.sun.xml.bind.v2.runtime.JAXBContextImpl context = (com.sun.xml.bind.v2.runtime.JAXBContextImpl) ContextFactory.createContext(classes, riProperties);
+        RuntimeTypeInfoSet runtimeTypeInfoSet = JAXBModelFactory.create(context, classes);
+    }
+
     public Marshaller createMarshaller() throws JAXBException {
         return new MarshallerImpl(introspector);
     }
