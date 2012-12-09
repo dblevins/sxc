@@ -9,24 +9,11 @@
   <packaging>pom</packaging>
 
   <inceptionYear>2007</inceptionYear>
-  <url>http://soter.codehaus.org</url>
-
-  <licenses>
-    <license>
-      <name>CDDL 1.0</name>
-      <url>http://sxc.codehaus.org/License</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <organization>
-    <name>Envoi Solutions LLC</name>
-    <url>http://www.envoisolutions.com/</url>
-  </organization>
 
   <scm>
-    <connection>scm:svn:https://svn.codehaus.org/sxc/trunk</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/sxc/trunk</developerConnection>
-    <url>http://svn.soter.codehaus.org/browse/sxc/trunk</url>
+    <connection>scm:git:https://github.com/dblevins/sxc.git</connection>
+    <developerConnection>scm:git:https://github.com/dblevins/sxc.git</developerConnection>
+    <url>https://github.com/dblevins/sxc</url>
   </scm>
 
   <modules>
@@ -35,22 +22,7 @@
     <module>sxc-xpath</module>
     <module>sxc-jaxb</module>
     <module>sxc-jaxb-maven-plugin</module>
-    <module>sxc-drools</module>
   </modules>
-
-  <profiles>
-    <profile>
-      <id>performance</id>
-      <activation>
-        <property>
-          <name>performance</name>
-        </property>
-      </activation>
-      <modules>
-        <module>sxc-performance</module>
-      </modules>
-    </profile>
-  </profiles>
 
   <dependencyManagement>
     <dependencies>
