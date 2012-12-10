@@ -27,7 +27,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.ValidationEvent;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.ValidationEventHandler;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -59,7 +58,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 @SuppressWarnings({"unchecked"})
-public class UnmarshallerImpl implements Unmarshaller {
+public class UnmarshallerImpl implements ExtendedUnmarshaller {
     private final JAXBIntrospectorImpl introspector;
 
     private final XMLInputFactory xif = XMLInputFactory.newInstance();

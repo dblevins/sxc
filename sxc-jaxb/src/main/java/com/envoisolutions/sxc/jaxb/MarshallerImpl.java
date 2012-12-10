@@ -48,7 +48,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-public class MarshallerImpl extends AbstractMarshallerImpl {
+public class MarshallerImpl extends AbstractMarshallerImpl implements ExtendedMarshaller {
 	public static final String MARSHALLER = "sxc.marshaller";
 
     private final JAXBIntrospectorImpl introspector;

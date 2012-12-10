@@ -8,21 +8,27 @@
   </parent>
 
   <groupId>org.metatype.sxc</groupId>
-  <artifactId>sxc-jaxb-maven-plugin</artifactId>
+  <artifactId>sxc-jaxb-core</artifactId>
   <version>0.8-SNAPSHOT</version>
-  <name>SXC JAXB :: Maven Plugin</name>
+  <name>SXC JAXB :: Core</name>
 
-  <packaging>maven-plugin</packaging>
+  <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
       <groupId>org.metatype.sxc</groupId>
-      <artifactId>sxc-core</artifactId>
+      <artifactId>sxc-runtime</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.metatype.sxc</groupId>
-      <artifactId>sxc-jaxb</artifactId>
+      <artifactId>sxc-jaxb-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metatype.sxc</groupId>
+      <artifactId>sxc-core</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
@@ -35,36 +41,27 @@
           <artifactId>stax-api</artifactId>
         </exclusion>
       </exclusions>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-xjc</artifactId>
       <version>2.1.2</version>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-      <version>2.0</version>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>core</artifactId>
+      <version>3.2.0.658</version>
+      <optional>true</optional>
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>2.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.codehaus.woodstox</groupId>
-      <artifactId>wstx-asl</artifactId>
-      <version>3.2.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

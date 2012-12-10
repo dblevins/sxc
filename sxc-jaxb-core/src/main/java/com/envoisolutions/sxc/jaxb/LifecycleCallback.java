@@ -17,11 +17,11 @@
  */
 package com.envoisolutions.sxc.jaxb;
 
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-
-import static com.envoisolutions.sxc.jaxb.JavaUtils.isPrivate;
 
 public class LifecycleCallback {
     public final Method beforeUnmarshal;
@@ -55,7 +55,7 @@ public class LifecycleCallback {
             return null;
         }
 
-        if (isPrivate(method)) {
+        if (isPublic(method)) {
             try {
                 method.setAccessible(true);
             } catch (Exception e) {
@@ -63,6 +63,10 @@ public class LifecycleCallback {
             }
         }
         return method;
+    }
+
+    public static boolean isPublic(Member member) {
+        return member != null && (!Modifier.isPublic(member.getDeclaringClass().getModifiers()) || !Modifier.isPublic(member.getModifiers()));
     }
 
     public void beforeUnmarshal(Object bean, Unmarshaller unmarshaller, Object parent) throws Exception {

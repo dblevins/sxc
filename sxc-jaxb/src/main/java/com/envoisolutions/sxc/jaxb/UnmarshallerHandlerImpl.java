@@ -23,14 +23,14 @@ import javax.xml.stream.XMLEventReader;
 import com.envoisolutions.sxc.jaxb.StaxContentHandler.StaxParser;
 
 public class UnmarshallerHandlerImpl extends StaxContentHandler implements UnmarshallerHandler, StaxParser {
-    private final UnmarshallerImpl unmarshaller;
+    private final ExtendedUnmarshaller extendedUnmarshaller;
     private Class<?> type;
     private Object result;
     private JAXBException jaxbException;
 
-    public UnmarshallerHandlerImpl(UnmarshallerImpl unmarshaller) {
+    public UnmarshallerHandlerImpl(ExtendedUnmarshaller extendedUnmarshaller) {
         super();
-        this.unmarshaller = unmarshaller;
+        this.extendedUnmarshaller = extendedUnmarshaller;
         setStaxParser(this);
     }
 
@@ -62,9 +62,9 @@ public class UnmarshallerHandlerImpl extends StaxContentHandler implements Unmar
     public void parse(XMLEventReader reader) {
         try {
             if (type == null) {
-                result = unmarshaller.unmarshal(reader);
+                result = extendedUnmarshaller.unmarshal(reader);
             } else {
-                result = unmarshaller.unmarshal(reader, type);
+                result = extendedUnmarshaller.unmarshal(reader, type);
             }
         } catch (JAXBException e) {
             jaxbException = e;

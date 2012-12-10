@@ -20,7 +20,6 @@ package com.envoisolutions.sxc.jaxb;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 

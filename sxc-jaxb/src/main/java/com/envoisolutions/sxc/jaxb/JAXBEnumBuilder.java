@@ -29,7 +29,6 @@ import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
-import com.sun.codemodel.JFieldVar;
 
 public class JAXBEnumBuilder {
     private final BuilderContext builderContext;

@@ -46,8 +46,8 @@ public class RuntimeContext {
     private final Map<String, Object> properties = new HashMap<String, Object>();
     private final Map<String, Object> idRegistry = new HashMap<String, Object>();
     private final Map<String, Collection<IdRefTarget>> unresolvedRefs = new HashMap<String, Collection<IdRefTarget>>();
-    private final MarshallerImpl marshaller;
-    private final UnmarshallerImpl unmarshaller;
+    private final ExtendedMarshaller marshaller;
+    private final ExtendedUnmarshaller unmarshaller;
 
     private final LinkedList<Object> stack = new LinkedList<Object>();
 
@@ -56,12 +56,12 @@ public class RuntimeContext {
         unmarshaller = null;
     }
 
-    public RuntimeContext(UnmarshallerImpl unmarshaller) {
+    public RuntimeContext(ExtendedUnmarshaller unmarshaller) {
         this.marshaller = null;
         this.unmarshaller = unmarshaller;
     }
 
-    public RuntimeContext(MarshallerImpl marshaller) {
+    public RuntimeContext(ExtendedMarshaller marshaller) {
         this.marshaller = marshaller;
         this.unmarshaller = null;
     }

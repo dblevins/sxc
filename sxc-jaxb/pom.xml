@@ -25,6 +25,11 @@
 
     <dependency>
       <groupId>org.metatype.sxc</groupId>
+      <artifactId>sxc-jaxb-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.metatype.sxc</groupId>
       <artifactId>sxc-core</artifactId>
       <optional>true</optional>
     </dependency>

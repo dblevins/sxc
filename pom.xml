@@ -27,6 +27,7 @@
     <module>sxc-core</module>
     <module>sxc-xpath</module>
     <module>sxc-jaxb</module>
+    <module>sxc-jaxb-core</module>
     <module>sxc-jaxb-maven-plugin</module>
   </modules>
 
@@ -45,6 +46,11 @@
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-jaxb</artifactId>
+        <version>${version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.metatype.sxc</groupId>
+        <artifactId>sxc-jaxb-core</artifactId>
         <version>${version}</version>
       </dependency>
       <dependency>
