@@ -3,11 +3,11 @@
 
   <parent>
     <artifactId>sxc</artifactId>
-    <groupId>com.envoisolutions.sxc</groupId>
+    <groupId>org.metatype.sxc</groupId>
     <version>0.8-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.envoisolutions.sxc</groupId>
+  <groupId>org.metatype.sxc</groupId>
   <artifactId>sxc-jaxb-maven-plugin</artifactId>
   <version>0.8-SNAPSHOT</version>
   <name>SXC JAXB :: Maven Plugin</name>
@@ -16,12 +16,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.envoisolutions.sxc</groupId>
+      <groupId>org.metatype.sxc</groupId>
       <artifactId>sxc-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.envoisolutions.sxc</groupId>
+      <groupId>org.metatype.sxc</groupId>
       <artifactId>sxc-jaxb</artifactId>
     </dependency>
 

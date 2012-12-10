@@ -5,7 +5,7 @@
   <version>0.8-SNAPSHOT</version>
 
   <parent>
-    <groupId>com.envoisolutions.sxc</groupId>
+    <groupId>org.metatype.sxc</groupId>
     <artifactId>sxc</artifactId>
     <version>0.8-SNAPSHOT</version>
   </parent>

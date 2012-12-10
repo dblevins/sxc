@@ -1,7 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.envoisolutions.sxc</groupId>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
+  <groupId>org.metatype.sxc</groupId>
   <artifactId>sxc</artifactId>
   <version>0.8-SNAPSHOT</version>
   <name>Simple XML Compiler</name>
@@ -27,27 +33,27 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.envoisolutions.sxc</groupId>
+        <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-core</artifactId>
         <version>${version}</version>
       </dependency>
       <dependency>
-        <groupId>com.envoisolutions.sxc</groupId>
+        <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-runtime</artifactId>
         <version>${version}</version>
       </dependency>
       <dependency>
-        <groupId>com.envoisolutions.sxc</groupId>
+        <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-jaxb</artifactId>
         <version>${version}</version>
       </dependency>
       <dependency>
-        <groupId>com.envoisolutions.sxc</groupId>
+        <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-drools</artifactId>
         <version>${version}</version>
       </dependency>
       <dependency>
-        <groupId>com.envoisolutions.sxc</groupId>
+        <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-xpath</artifactId>
         <version>${version}</version>
       </dependency>
@@ -127,22 +133,6 @@
     </plugins>
   </build>
 
-  <distributionManagement>
-    <repository>
-      <id>codehaus.org</id>
-      <name>Central Repository</name>
-      <url>dav:https://dav.codehaus.org/repository/sxc/</url>
-    </repository>
-    <snapshotRepository>
-      <id>codehaus.org</id>
-      <name>Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/sxc/</url>
-    </snapshotRepository>
-    <site>
-      <id>codehaus.org</id>
-      <url>dav:https://dav.codehaus.org/sxc/</url>
-    </site>
-  </distributionManagement>
   <reporting>
     <plugins>
       <plugin>

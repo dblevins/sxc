@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.envoisolutions.sxc</groupId>
+    <groupId>org.metatype.sxc</groupId>
     <artifactId>sxc</artifactId>
     <version>0.8-SNAPSHOT</version>
   </parent>
@@ -19,12 +19,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.envoisolutions.sxc</groupId>
+      <groupId>org.metatype.sxc</groupId>
       <artifactId>sxc-runtime</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.envoisolutions.sxc</groupId>
+      <groupId>org.metatype.sxc</groupId>
       <artifactId>sxc-core</artifactId>
       <optional>true</optional>
     </dependency>
