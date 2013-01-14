@@ -1001,7 +1001,7 @@ public class ReaderIntrospector {
     }
 
     private JVar as(JAXBObjectBuilder builder, JVar xsrVar, JBlock block, Class<?> cls, String name, boolean nillable) {
-        JExpression value = coerce(builder, xsrVar, xsrVar.invoke("getElementAsString"), cls);
+        JExpression value = coerce(builder, xsrVar, xsrVar.invoke("getElementText"), cls);
 
         JVar var;
         if (!cls.isPrimitive() && nillable) {

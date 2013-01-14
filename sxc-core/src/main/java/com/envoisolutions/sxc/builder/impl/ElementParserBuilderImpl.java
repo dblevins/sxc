@@ -451,7 +451,7 @@ public class ElementParserBuilderImpl extends AbstractParserBuilder implements E
         this.valueType = true;
         
         if (cls.equals(String.class)) {
-            return createVar("getElementText", String.class, nillable); // don't trim, use an adapter for it
+            return createVar("getElementAsString", String.class, nillable);
         } else if (cls.equals(int.class) || cls.equals(Integer.class)) {
             return createVar("getElementAsInt", cls, nillable);
         } else if (cls.equals(double.class) || cls.equals(Double.class)) {
