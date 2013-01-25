@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<schema targetNamespace="http://sxc.envoisolutions.com/picture"
+<schema targetNamespace="http://sxc.metatype.org/picture"
 	xmlns="http://www.w3.org/2001/XMLSchema"
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:tns="http://sxc.envoisolutions.com/picture"
+	xmlns:tns="http://sxc.metatype.org/picture"
 	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	elementFormDefault="qualified">

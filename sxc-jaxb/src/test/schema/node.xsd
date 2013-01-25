@@ -17,10 +17,10 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<schema targetNamespace="http://envoisolutions.com/node" 
+<schema targetNamespace="http://metatype.org/node"
   xmlns="http://www.w3.org/2001/XMLSchema"
   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-  xmlns:tns="http://envoisolutions.com/node"
+  xmlns:tns="http://metatype.org/node"
   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" elementFormDefault="qualified">
   
   <complexType name="Node">

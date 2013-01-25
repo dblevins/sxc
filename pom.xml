@@ -36,32 +36,32 @@
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-core</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-runtime</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-jaxb</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-jaxb-core</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-drools</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.metatype.sxc</groupId>
         <artifactId>sxc-xpath</artifactId>
-        <version>${version}</version>
+        <version>${project.version}</version>
       </dependency>
 
     </dependencies>

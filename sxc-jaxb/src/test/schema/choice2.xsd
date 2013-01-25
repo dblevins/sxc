@@ -18,8 +18,8 @@
   under the License.
 -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  targetNamespace="http://sxc.envoisolutions.com/choice2"
-  xmlns:tns="http://sxc.envoisolutions.com/choice2" elementFormDefault="qualified"
+  targetNamespace="http://sxc.metatype.org/choice2"
+  xmlns:tns="http://sxc.metatype.org/choice2" elementFormDefault="qualified"
   xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
 
 

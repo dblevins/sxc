@@ -27,9 +27,9 @@
       <unpack>true</unpack>
       <scope>runtime</scope>
       <includes>
-        <include>com.envoisolutions.sxc:sxc-core</include>
-        <include>com.envoisolutions.sxc:sxc-runtime</include>
-        <include>com.envoisolutions.sxc:sxc-jaxb</include>
+        <include>org.metatype.sxc:sxc-core</include>
+        <include>org.metatype.sxc:sxc-runtime</include>
+        <include>org.metatype.sxc:sxc-jaxb</include>
       </includes>
       <excludes>
         <exclude>*:jar</exclude>
