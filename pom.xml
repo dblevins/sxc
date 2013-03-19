@@ -9,7 +9,7 @@
 
   <groupId>org.metatype.sxc</groupId>
   <artifactId>sxc</artifactId>
-  <version>0.8</version>
+  <version>0.9-SNAPSHOT</version>
   <name>Simple XML Compiler</name>
 
   <packaging>pom</packaging>
