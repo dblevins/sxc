@@ -84,19 +84,6 @@
   </dependencies>
 
   <!--  needed for plugin snapshots (i.e. jdepend) -->
-  <repositories>
-    <repository>
-      <id>jboss</id>
-      <name>JBoss Repository - for commons jci</name>
-      <url>http://repository.jboss.com/maven2/</url>
-    </repository>
-    <repository>
-      <id>java.net</id>
-      <name>Java.net - Japex</name>
-      <url>https://maven-repository.dev.java.net/nonav/repository/</url>
-      <layout>legacy</layout>
-    </repository>
-  </repositories>
 
   <!--  needed for plugin snapshots (i.e. jdepend) -->
   <pluginRepositories>
